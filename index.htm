@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
 <style>
-  /* ============ COLOURS & FONTS (edit here) ============ */
+  /* ============ COLOURS & FONTS  ============ */
   :root {
     --bg: #fbfaf6;
     --ink: #2c2a12;
@@ -19,6 +19,7 @@
     --line: #d8d4c6;
     --field: #ece8e2;
     --brand: #4e1a0b;       /* dark brown button */
+    --accent: #c2410c;      /* focus outline colour */
     --placeholder: #a3abab; /* grey boxes when a photo/video is missing */
 
     --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -28,6 +29,7 @@
   }
 
   * { box-sizing: border-box; }
+
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
@@ -472,21 +474,14 @@
 </section>
 
 <!-- ================= MENU ================= -->
-<!-- PHOTOS: cut-out PNGs with transparent backgrounds work best -->
 <section class="menu">
-    <img class="menu-bg" src="img/Thirty (1).png" alt="" onerror="this.classList.add('missing')">
+  <img class="menu-bg" src="img/menu.png" alt="" onerror="this.classList.add('missing')">
   <div class="menu-text">
     <h2>
       <span class="line"><span class="s">from</span> <span class="i">staples</span></span>
       <span class="line"><span class="s">to</span> <span class="i">specials</span></span>
     </h2>
-    <p>We’re still confirming our menu for the home cafe. Feel free to reserve your spot first as we confirm our menu &lt;3</p>
-
-      <picture>
-    <source media="(max-width: 760px)" srcset="images/menu-mobile.png">
-    <img class="menu-bg" src="img/Thirty (1).png alt=" onerror="this.classList.add('missing')">
-  </picture>
-
+    <p>We’re still confirming our menu for the home café. Feel free to reserve your spot first as we confirm our menu &lt;3</p>
   </div>
 </section>
 
