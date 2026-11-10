@@ -534,9 +534,9 @@
       <div class="menu-card">
         <h3>Coffee &amp; Drinks</h3>
         <ul>
-          <li><span>Gula Melaka Latte</span><span>$5.50</span></li>
+          <li><span>Gula Melaka Latte</span><span>$5.00</span></li>
           <li><span>Bandung</span><span>$4.00</span></li>
-          <li><span>Coconut Latte</span><span>$5.50</span></li>
+          <li><span>Coconut Latte</span><span>$5.00</span></li>
           <li><span>Lychee Rose Tea</span><span>$4.00</span></li>
         </ul>
       </div>
@@ -752,4 +752,55 @@
 
   /* ---------- Floating RSVP button ----------
      Hidden at the top (the hero already has a button)
-     and when the form is already
+     and when the form is already on screen. */
+  const floatBtn = document.getElementById("rsvp-float");
+  const seen = { hero: true, rsvp: false };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.target.id === "top") seen.hero = entry.isIntersecting;
+      if (entry.target.id === "rsvp") seen.rsvp = entry.isIntersecting;
+    });
+    floatBtn.classList.toggle("is-hidden", seen.hero || seen.rsvp);
+  }, { threshold: 0.15 });
+  observer.observe(document.getElementById("top"));
+  observer.observe(document.getElementById("rsvp"));
+
+  /* =====================================================
+     RSVP FORM (sends to Formspree without leaving the page)
+     ===================================================== */
+  const form = document.getElementById("rsvp-form");
+  const statusEl = document.getElementById("form-status");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusEl.className = "form-status";
+
+    if (form.action.includes("YOUR_FORM_ID")) {
+      statusEl.textContent = "This form isn’t connected yet. Add your Formspree ID to the form’s action link.";
+      statusEl.classList.add("err");
+      return;
+    }
+
+    const btn = form.querySelector(".submit");
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" }
+      });
+      if (!res.ok) throw new Error();
+      form.reset();
+      statusEl.textContent = "Spot reserved! We’ll be in touch about payment soon.";
+      statusEl.classList.add("ok");
+    } catch {
+      statusEl.textContent = "Your RSVP didn’t go through. Check your connection and try again.";
+      statusEl.classList.add("err");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Reserve my spot";
+    }
+  });
+</script>
+</body>
+</html>
