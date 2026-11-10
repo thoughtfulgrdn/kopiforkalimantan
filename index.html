@@ -8,7 +8,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400&family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
   /* ============ COLOURS & FONTS  ============ */
@@ -26,6 +27,8 @@
     --display: "Inter Tight", "Inter", system-ui, sans-serif;
     --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
     color-scheme: light;
+    --mono: "DM Mono", ui-monospace, Menlo, monospace;
+    --menu-card: #4f3b32;   /* brown menu cards */
   }
 
   * { box-sizing: border-box; }
@@ -250,31 +253,80 @@
     padding-inline: 1.25rem;
   }
 
-  /* ============ MENU ============ */
+    /* ============ MENU ============ */
   .menu {
     position: relative;
-    min-height: 680px;
-    display: grid;
-    place-items: center;
-    text-align: center;
     overflow: hidden;
-    padding: 6rem 1.25rem;
+    padding: clamp(4rem, 9vw, 7rem) 0 clamp(4rem, 8vw, 6rem);
   }
-  .menu h2 { margin: 0; line-height: 0.9; font-weight: 400; }
-  .menu h2 .s { font-family: var(--display); font-weight: 300; letter-spacing: -0.03em; }
-  .menu h2 .i { font-family: var(--serif); font-style: italic; font-weight: 400; }
-  .menu h2 span.line { display: block; font-size: clamp(2.6rem, 8vw, 5.5rem); }
-  .menu-text { position: relative; z-index: 1; max-width: 34rem; }
-  .menu-text p { margin: 1.5rem auto 0; font-size: 1.05rem; }
-
-  .menu-bg {
+    .menu-bg {               /* the food images around the edges */
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;        /* fills the section; edges may crop on narrow screens */
+    object-fit: cover;
     object-position: center;
     pointer-events: none;
+    opacity: 0.3;          /* 30% visible */
+  }
+  .menu .container { position: relative; z-index: 1; }
+
+  .menu h2 {
+    margin: 0 0 clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    -webkit-text-stroke: 0.025em currentColor;
+  }
+  .menu h2 em { font-style: italic; }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.25rem, 3vw, 3rem);
+    align-items: start;
+  }
+  .menu-card {
+    background: var(--menu-card);
+    color: #fff;
+    padding: 1.5rem 1.25rem 0.75rem;
+  }
+  .menu-card h3 {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    letter-spacing: -0.02em;
+  }
+  .menu-card ul { list-style: none; margin: 0; padding: 0; }
+  .menu-card li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.45);
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+  }
+  .menu-card li span:last-child { white-space: nowrap; }  /* keeps prices on one line */
+
+  .menu-note {
+    max-width: 46rem;
+    margin: clamp(1.5rem, 4vw, 2.5rem) auto 0;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  /* Tablets & phones: cards stack, food images sit along the top */
+  @media (max-width: 960px) {
+    .menu-grid { grid-template-columns: 1fr; max-width: 480px; margin-inline: auto; }
+    .menu-bg { inset: 0 0 auto 0; height: auto; object-fit: contain; object-position: top center; }
   }
 
     /* ============ FAQ ============ */
@@ -385,22 +437,6 @@
     .arrow { width: 38px; height: 38px; }
     .arrow.prev { left: 0.4rem; }
     .arrow.next { right: 0.4rem; }
-    /* needs to avoid getting clipped on mobile */ 
-    .menu {
-      min-height: 0;
-      padding: 3rem 1.25rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .menu-bg {
-      position: static;      /* sits below the text instead of behind it */
-      width: 100%;
-      height: auto;
-      object-fit: contain;   /* shows the whole image, no cropping */
-      order: 2;
-    }
     .rsvp-head { flex-direction: column; align-items: flex-start; }
   }
 </style>
@@ -489,17 +525,44 @@
 </section>
 
 <!-- ================= MENU ================= -->
-<section class="menu">
+<section class="menu" id="menu">
   <img class="menu-bg" src="img/menu.png" alt="" onerror="this.classList.add('missing')">
-  <div class="menu-text">
-    <h2>
-      <span class="line"><span class="s">from</span> <span class="i">staples</span></span>
-      <span class="line"><span class="s">to</span> <span class="i">specials</span></span>
-    </h2>
-    <p>We’re still confirming our menu for the home cafe. Feel free to reserve your spot first as we confirm our menu &lt;3</p>
+  <div class="container">
+    <h2>from <em>staples</em> to <em>specials</em></h2>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <h3>Coffee &amp; Drinks</h3>
+        <ul>
+          <li><span>Gula Melaka Latte</span><span>$5.50</span></li>
+          <li><span>Bandung</span><span>$4.00</span></li>
+          <li><span>Coconut Latte</span><span>$5.50</span></li>
+          <li><span>Lychee Rose Tea</span><span>$4.00</span></li>
+        </ul>
+      </div>
+
+      <div class="menu-card">
+        <h3>Bites &amp; Snacks</h3>
+        <ul>
+          <li><span>Sliders</span><span>$5.00</span></li>
+          <li><span>Salted Egg Pasta</span><span>$5.00</span></li>
+          <li><span>Charcuterie Skewers</span><span>$3.00</span></li>
+        </ul>
+      </div>
+
+      <div class="menu-card">
+        <h3>Desserts</h3>
+        <ul>
+          <li><span>Chocolate Chip Cookies</span><span>$2.80</span></li>
+          <li><span>Pandan Cake</span><span>$1.50</span></li>
+          <li><span>Banana Bread</span><span>$1.50</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="menu-note">All food is halal, with vegetarian options available. To reduce waste, we won’t have takeaway packaging, so bring your own container or cup if you’d like to take anything home. Each ticket includes a drink and a bake, and menu prices are for any extras.</p>
   </div>
 </section>
-
 <!-- ================= FAQ ================= -->
 <section class="faq">
   <div class="container">
@@ -689,55 +752,4 @@
 
   /* ---------- Floating RSVP button ----------
      Hidden at the top (the hero already has a button)
-     and when the form is already on screen. */
-  const floatBtn = document.getElementById("rsvp-float");
-  const seen = { hero: true, rsvp: false };
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.target.id === "top") seen.hero = entry.isIntersecting;
-      if (entry.target.id === "rsvp") seen.rsvp = entry.isIntersecting;
-    });
-    floatBtn.classList.toggle("is-hidden", seen.hero || seen.rsvp);
-  }, { threshold: 0.15 });
-  observer.observe(document.getElementById("top"));
-  observer.observe(document.getElementById("rsvp"));
-
-  /* =====================================================
-     RSVP FORM (sends to Formspree without leaving the page)
-     ===================================================== */
-  const form = document.getElementById("rsvp-form");
-  const statusEl = document.getElementById("form-status");
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    statusEl.className = "form-status";
-
-    if (form.action.includes("YOUR_FORM_ID")) {
-      statusEl.textContent = "This form isn’t connected yet. Add your Formspree ID to the form’s action link.";
-      statusEl.classList.add("err");
-      return;
-    }
-
-    const btn = form.querySelector(".submit");
-    btn.disabled = true;
-    btn.textContent = "Sending…";
-    try {
-      const res = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" }
-      });
-      if (!res.ok) throw new Error();
-      form.reset();
-      statusEl.textContent = "Spot reserved! We’ll be in touch about payment soon.";
-      statusEl.classList.add("ok");
-    } catch {
-      statusEl.textContent = "Your RSVP didn’t go through. Check your connection and try again.";
-      statusEl.classList.add("err");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Reserve my spot";
-    }
-  });
-</script>
-</body>
-</html>
+     and when the form is already
